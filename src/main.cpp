@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include "../include/secrets.h"  // ✅ Include credentials securely
 
 #define SENSOR_PIN A0    // Soil Moisture Sensor
 #define SENSOR_VCC 12    // GPIO12 (D6) Powers the Sensor
@@ -10,21 +11,13 @@
 #define MOISTURE_CHECK_INTERVAL_SECONDS 10  // Moisture check every 10 seconds
 #define MOISTURE_THRESHOLD 500              // Moisture threshold for dry soil
 
-// **WiFi & MQTT Credentials**
-const char* ssid = "Dror&Yuval";
-const char* password = "318187747";
-const char* mqtt_server = "10.100.102.19";
-const int mqtt_port = 1883;
-const char* mqtt_user = "drorb_mqtt";
-const char* mqtt_pass = "1997";
-
 WiFiClient espClient;
 PubSubClient client(espClient);
 
 // **WiFi Connection Function**
 void connectToWiFi() {
   Serial.print("Connecting to WiFi...");
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
   int attempts = 0;
   while (WiFi.status() != WL_CONNECTED && attempts < 20) {
     delay(1000);
@@ -40,10 +33,10 @@ void connectToWiFi() {
 
 // **MQTT Connection Function**
 void connectToMQTT() {
-  client.setServer(mqtt_server, mqtt_port);
+  client.setServer(MQTT_SERVER, MQTT_PORT);
   int attempts = 0;
   while (!client.connected() && attempts < 10) {
-    if (client.connect("ESP8266WaterSensor", mqtt_user, mqtt_pass)) {
+    if (client.connect("ESP8266WaterSensor", MQTT_USER, MQTT_PASS)) {
       Serial.println("Connected to MQTT!");
     } else {
       Serial.print("MQTT Failed. RC=");
