@@ -4,7 +4,7 @@ This project uses an **ESP8266** microcontroller to measure soil moisture, contr
 
 ---
 
-## 🔧 Features
+##  Features
 
 - Reads analog soil moisture values via a sensor
 - Converts raw values into percentage moisture
